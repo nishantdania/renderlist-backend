@@ -7,23 +7,21 @@ const jwt = require('jsonwebtoken'),
 
 function generateToken(user) {
 	return jwt.sign(user, config.secret, {
-		expiresIn: 10080 // in seconds
+		expiresIn: config.loginTokenExpiration 
 	});
 }
 
 function setUserInfo(request) {
 	let getUserInfo = {
 		_id: request._id,
-		firstName: request.profile.firstName,
-		lastName: request.profile.lastName,
-		username: request.username,
-		role: request.role,
+		email: request.email
 	};
 	return getUserInfo;
 }
 
 exports.login = function(req, res, next) {
 		let userInfo = setUserInfo(req.user);
+		console.log('login req : '+req);
 		res.status(200).json({
 			token: 'JWT ' + generateToken(userInfo),
 			user: userInfo
@@ -32,13 +30,13 @@ exports.login = function(req, res, next) {
 
 
 exports.register = function(req, res, next) {
-	const username = req.body.username;
+	let email = req.body.email;
 	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
 	const password = req.body.password;
 
-	if (!username) {
-	return res.status(422).send({ error: 'You must enter an username .' });
+	if (!email) {
+	return res.status(422).send({ error: 'You must enter an email.' });
 
 	}
 
@@ -50,26 +48,27 @@ exports.register = function(req, res, next) {
 		return res.status(422).send({ error: 'You must enter a password.'  });
 	}
 
-	User.findOne({ username : username }, function(err, existingUser) {
-	if (err) { return next(err);  }
-
-	if (existingUser) {
-		return res.status(422).send({ error: 'That username is already in use.'  });
-	}
-
-	let user = new User({
-		username: username ,
-		password: password,
-		profile: { firstName: firstName, lastName: lastName  }
-	});
-
-	user.save(function(err, user) {
+	User.findOne({ email: email}, function(err, existingUser) {
 		if (err) { return next(err);  }
-		let userInfo = setUserInfo(user);
-		res.status(201).json({
-			token: 'JWT ' + generateToken(userInfo),
-			user: userInfo
+
+		if (existingUser) {
+			return res.status(422).send({ error: 'That email is already in use.'  });
+		}
+
+		let user = new User({
+			email: email,
+			password: password,
+			firstName: firstName,
+			lastName: lastName
 		});
+
+		user.save(function(err, user) {
+			if (err) { return next(err);  }
+			let userInfo = setUserInfo(user);
+			res.status(201).json({
+				token: 'JWT ' + generateToken(userInfo),
+				user: userInfo
+			});
 
 		});
 	});
