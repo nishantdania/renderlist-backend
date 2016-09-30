@@ -21,7 +21,6 @@ function setUserInfo(request) {
 
 exports.login = function(req, res, next) {
 		let userInfo = setUserInfo(req.user);
-		console.log('login req : '+req);
 		res.status(200).json({
 			token: 'JWT ' + generateToken(userInfo),
 			user: userInfo
@@ -30,14 +29,13 @@ exports.login = function(req, res, next) {
 
 
 exports.register = function(req, res, next) {
-	let email = req.body.email;
+	const email = req.body.email;
 	const firstName = req.body.firstName;
 	const lastName = req.body.lastName;
 	const password = req.body.password;
 
 	if (!email) {
-	return res.status(422).send({ error: 'You must enter an email.' });
-
+		return res.status(422).send({ error: 'You must enter an email.' });
 	}
 
 	if (!firstName || !lastName) {
