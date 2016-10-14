@@ -4,17 +4,28 @@ const express = require('express'),
 	bodyParser = require('body-parser'),
 	mongoose = require('mongoose'),
 	config = require('./config/main'),
+	cookieParser = require('cookie-parser'),
+	session = require('express-session'),
+	passport = require('passport'),
 	router = require('./router');
 
-mongoose.connect(config.database);
+require('./config/passport')(passport);
 
-const server = app.listen(config.port, function () {
-  console.log('Renderlist listening on port ' + config.port + ' !');
-});
+mongoose.connect(config.database);
 
 app.use(bodyParser.urlencoded({ extended: false  }));  
 app.use(bodyParser.json());
 app.use(logger('dev'));
+app.use(cookieParser());
+
+app.use(session({
+	secret: 'someSecret',
+	resave: true,
+    saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(function(req, res, next) {  
 	res.header("Access-Control-Allow-Origin", "*");
@@ -24,4 +35,9 @@ app.use(function(req, res, next) {
 	next();
  });
 
-router(app);
+router(app, passport);
+
+const server = app.listen(config.port, function () {
+  console.log('Renderlist listening on port ' + config.port + ' !');
+});
+

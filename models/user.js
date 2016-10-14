@@ -20,6 +20,10 @@ const UserSchema = new Schema({
 		lastName: {
 			type: String
 		},
+		facebook: {
+			id: {type: String},
+			name: {type: String}
+		}
 	},
 	{
 	  timestamps: true
