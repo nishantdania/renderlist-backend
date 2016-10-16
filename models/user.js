@@ -4,7 +4,7 @@ const mongoose = require('mongoose'),
 	bcrypt = require('bcrypt-nodejs');
 
 const UserSchema = new Schema({  
-		email: {
+/*		email: {
 			type: String,
 			lowercase: true,
 			unique: true,
@@ -19,10 +19,13 @@ const UserSchema = new Schema({
 		},
 		lastName: {
 			type: String
-		},
+		},*/
 		facebook: {
-			id: {type: String},
-			name: {type: String}
+			id: { type : String, unique : true },
+			name : String,
+			email : String,
+			token : String,
+			profilePhoto : String
 		}
 	},
 	{
@@ -30,6 +33,7 @@ const UserSchema = new Schema({
 	}
 );
 
+/*
 UserSchema.pre('save', function(next) {
 	const user = this;
 
@@ -51,6 +55,7 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 		cb(null, isMatch);
 	});
 }
+*/
 
 module.exports = mongoose.model('User', UserSchema);
 
