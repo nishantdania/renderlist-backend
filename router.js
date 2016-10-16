@@ -15,17 +15,18 @@ module.exports = function(app, passport) {
 		}		
 	);
 
-apiRoutes.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email'  }));
+	authRoutes.get('/facebook', passport.authenticate('facebook'));
 
     // handle the callback after facebook has authenticated the user
-    apiRoutes.get('/auth/facebook/callback',
+    authRoutes.get('/facebook/callback',
 			passport.authenticate('facebook', {
-            successRedirect : '/profile',
+            successRedirect : '/api/success',
             failureRedirect : '/failure'
-        
-				}));
-
-
-
+		})
+	);
+	apiRoutes.get('/success', function(req, res) {
+			res.send(req.user);
+		}
+	);
 	app.use('/api', apiRoutes);
 };
