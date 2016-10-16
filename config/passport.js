@@ -1,8 +1,8 @@
 const User = require('../models/user'),
-//	config = require('./main'),
+	config = require('./main'),
 	configAuth = require('./auth'),
-//	JwtStrategy = require('passport-jwt').Strategy,
-//	ExtractJwt = require('passport-jwt').ExtractJwt,
+	JwtStrategy = require('passport-jwt').Strategy,
+	ExtractJwt = require('passport-jwt').ExtractJwt,
 //	LocalStrategy = require('passport-local'),
 	FacebookStrategy = require('passport-facebook').Strategy;
 
@@ -52,6 +52,23 @@ module.exports = function(passport) {
 	});
 */
 
+	const jwtOptions = {
+		jwtFromRequest: ExtractJwt.fromAuthHeader(),
+		secretOrKey: config.secret
+	};
+
+	const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
+		User.findOne({'facebook.id' : payload.id }, function(err, user) {
+			if (err) { return done(err, false);  }
+			if (user) {
+			done(null, user);
+
+			} else {
+			done(null, false);
+			}
+		});
+	});
+
 	const fbOptions = {
 		clientID        : configAuth.facebook.clientID,
         clientSecret    : configAuth.facebook.clientSecret,
@@ -83,9 +100,9 @@ module.exports = function(passport) {
 		}
 	);
 
-/*	passport.use(jwtLogin);
-	passport.use(localLogin);
-*/
+	passport.use(jwtLogin);
+//	passport.use(localLogin);
+
 	passport.use(fbLogin);
 }
 

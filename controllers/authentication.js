@@ -71,3 +71,12 @@ exports.register = function(req, res, next) {
 		});
 	});
 }
+
+
+exports.fbLogin = function(req, res, next) {
+	res.status(200).json({
+			token: 'JWT ' + generateToken({id :req.user.facebook.id})
+	});
+	//res.status(200).send(req.user.facebook.name);
+}
+
