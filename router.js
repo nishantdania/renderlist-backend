@@ -18,15 +18,7 @@ module.exports = function(app, passport) {
 	authRoutes.get('/facebook', passport.authenticate('facebook'));
 
     // handle the callback after facebook has authenticated the user
-    authRoutes.get('/facebook/callback',
-			passport.authenticate('facebook', {
-            successRedirect : '/api/success',
-            failureRedirect : '/failure'
-		})
-	);
-	apiRoutes.get('/success', function(req, res) {
-			res.send(req.user);
-		}
-	);
+    authRoutes.get('/facebook/callback', passport.authenticate('facebook'), AuthenticationController.fbLogin);
+
 	app.use('/api', apiRoutes);
 };
