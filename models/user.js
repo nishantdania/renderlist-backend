@@ -26,7 +26,15 @@ const UserSchema = new Schema({
 			email : String,
 			token : String,
 			profilePhoto : String
+		},
+		google : {
+			id: { type : String, unique : true },
+			name : String,
+			email : String,
+			token : String,
+			profilePhoto : String
 		}
+
 	},
 	{
 	  timestamps: true
