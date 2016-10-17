@@ -16,9 +16,11 @@ module.exports = function(app, passport) {
 	);
 
 	authRoutes.get('/facebook', passport.authenticate('facebook'));
-
-    // handle the callback after facebook has authenticated the user
     authRoutes.get('/facebook/callback', passport.authenticate('facebook'), AuthenticationController.fbLogin);
+	
+	authRoutes.get('/google', passport.authenticate('google',{ scope : ['profile', 'email']  }));
+    authRoutes.get('/google/callback', passport.authenticate('google'), AuthenticationController.fbLogin);
+
 
 	app.use('/api', apiRoutes);
 };

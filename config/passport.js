@@ -4,7 +4,9 @@ const User = require('../models/user'),
 	JwtStrategy = require('passport-jwt').Strategy,
 	ExtractJwt = require('passport-jwt').ExtractJwt,
 //	LocalStrategy = require('passport-local'),
-	FacebookStrategy = require('passport-facebook').Strategy;
+	FacebookStrategy = require('passport-facebook').Strategy,
+	GoogleStrategy = require('passport-google-oauth2').Strategy;
+
 
 module.exports = function(passport) {
 	// used to serialize the user for the session
@@ -99,10 +101,40 @@ module.exports = function(passport) {
 			});
 		}
 	);
-
+	
+	const googleOptions = {
+		clientID        : configAuth.google.clientID,
+        clientSecret    : configAuth.google.clientSecret,
+        callbackURL     : configAuth.google.callbackURL,
+		passReqToCallback	: true
+	
+	};
+	
+	const googleLogin = new GoogleStrategy(googleOptions, function(request, accessToken, refreshToken, profile, done) {
+		process.nextTick(function() {
+			User.findOne({ 'google.id' : profile.id }, function(err, user) {
+					if(err) res.status(404).send(err);
+					if(user) {
+						return done(null, user);
+					} else {
+						var newUser = new User();
+						newUser.google.id = profile.id;
+						newUser.google.name = profile.displayName;
+						newUser.google.email = profile.emails && profile.emails[0].value;
+						newUser.google.token = profile.token;
+						newUser.google.profilePhoto = profile.photos && profile.photos[0].value;
+						newUser.save(function(err, user) {
+							if (err) res.status(404).send(err); 
+						});
+						return done(null, newUser);	
+					}
+				});
+			});
+		}
+	);
 	passport.use(jwtLogin);
 //	passport.use(localLogin);
-
 	passport.use(fbLogin);
+	passport.use(googleLogin);
 }
 
