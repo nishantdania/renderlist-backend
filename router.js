@@ -1,4 +1,5 @@
 const AuthenticationController = require('./controllers/authentication'),  
+	StudioController = require('./controllers/studio'),  
 	express = require('express');
 
 module.exports = function(app, passport) {  
@@ -21,6 +22,8 @@ module.exports = function(app, passport) {
 	authRoutes.get('/google', passport.authenticate('google',{ scope : ['profile', 'email']  }));
     authRoutes.get('/google/callback', passport.authenticate('google'), AuthenticationController.fbLogin);
 
+	apiRoutes.post('/addStudio', StudioController.addStudio);
+	apiRoutes.get('/studios', StudioController.getStudios);
 
 	app.use('/api', apiRoutes);
 };

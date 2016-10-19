@@ -1,7 +1,6 @@
 const Studio = require('../models/studio');
 	
 exports.addStudio = function (req, res) {
-	console.log(req.body);
 	var studioData = req.body;
 	var studio = new Studio();
 	studio.name = studioData.name;
@@ -15,3 +14,9 @@ exports.addStudio = function (req, res) {
 	res.send('hmm');
 }
 
+exports.getStudios = function (req, res) {
+	Studio.find({}, function (err, studios) {
+		if(err) res.send(err);
+		res.send(studios);
+	});	
+}
