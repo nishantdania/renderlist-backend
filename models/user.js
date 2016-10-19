@@ -33,7 +33,11 @@ const UserSchema = new Schema({
 			email : String,
 			token : String,
 			profilePhoto : String
-		}
+		},
+		studio : {
+			type : Schema.Types.ObjectId,
+			ref: 'Studio'
+		 }
 
 	},
 	{
