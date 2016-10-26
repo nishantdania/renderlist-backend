@@ -1,7 +1,6 @@
 "use strict";
 
 const jwt = require('jsonwebtoken'),
-	crypto = require('crypto'),
 	User = require('../models/user'),
 	config = require('../config/main');
 
@@ -11,72 +10,11 @@ function generateToken(user) {
 	});
 }
 
-function setUserInfo(request) {
-	let getUserInfo = {
-		_id: request._id,
-		email: request.email
-	};
-	return getUserInfo;
-}
-
-exports.login = function(req, res, next) {
-		let userInfo = setUserInfo(req.user);
-		res.status(200).json({
-			token: 'JWT ' + generateToken(userInfo),
-			user: userInfo
-	});
-}
-
-
-exports.register = function(req, res, next) {
-	const email = req.body.email;
-	const firstName = req.body.firstName;
-	const lastName = req.body.lastName;
-	const password = req.body.password;
-
-	if (!email) {
-		return res.status(422).send({ error: 'You must enter an email.' });
-	}
-
-	if (!firstName || !lastName) {
-		return res.status(422).send({ error: 'You must enter your full name.' });
-	}
-
-	if (!password) {
-		return res.status(422).send({ error: 'You must enter a password.'  });
-	}
-
-	User.findOne({ email: email}, function(err, existingUser) {
-		if (err) { return next(err);  }
-
-		if (existingUser) {
-			return res.status(422).send({ error: 'That email is already in use.'  });
-		}
-
-		let user = new User({
-			email: email,
-			password: password,
-			firstName: firstName,
-			lastName: lastName
-		});
-
-		user.save(function(err, user) {
-			if (err) { return next(err);  }
-			let userInfo = setUserInfo(user);
-			res.status(201).json({
-				token: 'JWT ' + generateToken(userInfo),
-				user: userInfo
-			});
-
-		});
-	});
-}
-
-
-exports.fbLogin = function(req, res, next) {
-	res.status(200).json({
-			token: 'JWT ' + generateToken({id :req.user.facebook.id})
-	});
-	//res.status(200).send(req.user.facebook.name);
+exports.socialLogin = function(req, res, next) {
+	var token = '';
+	if(req.user.facebook.id)	token = 'JWT ' + generateToken({id :req.user.facebook.id});
+	else if(req.user.google.id)	token = 'JWT ' + generateToken({id :req.user.google.id});
+	var redirectURL = req.session.redirect + '?token=' + token;
+	res.redirect(redirectURL);
 }
 
