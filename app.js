@@ -19,7 +19,7 @@ app.use(logger('dev'));
 app.use(cookieParser());
 
 app.use(session({
-	secret: 'someSecret',
+	secret: config.secret,
 	resave: true,
     saveUninitialized: true
 }));
