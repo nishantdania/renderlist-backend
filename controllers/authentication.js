@@ -12,8 +12,7 @@ function generateToken(user) {
 
 exports.socialLogin = function(req, res, next) {
 	var token = '';
-	if(req.user.facebook.id)	token = 'JWT ' + generateToken({id :req.user.facebook.id});
-	else if(req.user.google.id)	token = 'JWT ' + generateToken({id :req.user.google.id});
+	token = 'JWT ' + generateToken({id :req.user._id});
 	var redirectURL = req.session.redirect + '?token=' + token;
 	res.redirect(redirectURL);
 }
