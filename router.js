@@ -30,5 +30,7 @@ module.exports = function(app, passport) {
 	apiRoutes.get('/studios', StudioController.getStudios);
 	apiRoutes.get('/myStudio', requireAuth, StudioController.getMyStudio);
 
+	apiRoutes.post('/userState', AuthenticationController.checkState)
+
 	app.use('/api', apiRoutes);
 };
