@@ -17,3 +17,16 @@ exports.socialLogin = function(req, res, next) {
 	res.redirect(redirectURL);
 }
 
+exports.checkState = function(req, res, next) {
+	var token = req.body.token.slice(4);
+	jwt.verify(token, config.secret, function(err, decoded) {
+		if (err) res.send({'success' : false });
+		else {
+			User.findOne({_id : decoded.id}, function(err, user) {
+				if (err) res.send({'success' : false });
+				else res.send(user);
+			});	
+		}	
+	});
+}	
+
