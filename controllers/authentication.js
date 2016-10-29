@@ -24,7 +24,20 @@ exports.checkState = function(req, res, next) {
 		else {
 			User.findOne({_id : decoded.id}, function(err, user) {
 				if (err) res.send({'success' : false });
-				else res.send(user);
+				else {
+					var data = {};
+					if (user.google.id){
+						data.name = user.google.name;
+						data.email = user.google.email;	
+						data.profilePhoto = user.google.profilePhoto;
+					}
+					else if (user.facebook.id){
+						data.name = user.facebook.name;
+						data.email = user.facebook.email;	
+						data.profilePhoto = user.facebook.profilePhoto;
+					}
+					res.send(data);
+				}			
 			});	
 		}	
 	});
