@@ -36,6 +36,7 @@ exports.checkState = function(req, res, next) {
 						data.email = user.facebook.email;	
 						data.profilePhoto = user.facebook.profilePhoto;
 					}
+					data.success = true;
 					res.send(data);
 				}			
 			});	
