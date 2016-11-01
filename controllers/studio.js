@@ -1,7 +1,7 @@
 const Studio = require('../models/studio');
+const User = require('../models/user');
 	
 exports.addStudio = function (req, res) {
-console.log(req.user);
 	var studioData = req.body;
 	var studio = new Studio();
 	studio.name = studioData.name;
@@ -13,7 +13,10 @@ console.log(req.user);
 	studio.save( function(err) {
 		if(err) res.send('error');
 	});
-	res.status(200).send();
+	User.findByIdAndUpdate(req.user._id, { studio : true }, function (err) {
+		if (err) res.status(404).send();	
+		else res.status(200).send();
+	});
 }
 
 exports.getStudios = function (req, res) {
