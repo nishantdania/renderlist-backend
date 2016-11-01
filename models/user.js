@@ -34,10 +34,7 @@ const UserSchema = new Schema({
 			token : String,
 			profilePhoto : String
 		},
-		studio : {
-			type : Schema.Types.ObjectId,
-			ref: 'Studio'
-		 }
+		studio : Boolean
 
 	},
 	{
