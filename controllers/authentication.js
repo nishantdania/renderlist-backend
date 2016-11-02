@@ -14,7 +14,6 @@ exports.socialLogin = function(req, res, next) {
 	var token = '';
 	token = 'JWT ' + generateToken({id :req.user._id});
 	var redirectURL = req.session.redirect + '?token=' + token;
-	console.log(req.user);
 	if (req.user.studio) redirectURL = redirectURL + '&hasStudio=true';
 	res.redirect(redirectURL);
 }

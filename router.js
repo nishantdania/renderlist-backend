@@ -1,5 +1,6 @@
 const AuthenticationController = require('./controllers/authentication'),  
 	StudioController = require('./controllers/studio'),  
+	GooglePlacesController = require('./controllers/googlePlaces'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
@@ -29,8 +30,9 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/addStudio', requireAuth, StudioController.addStudio);
 	apiRoutes.get('/studios', StudioController.getStudios);
 	apiRoutes.get('/myStudio', requireAuth, StudioController.getMyStudio);
-
 	apiRoutes.post('/userState', AuthenticationController.checkState)
+
+	apiRoutes.post('/places', GooglePlacesController.getPlaces);
 
 	app.use('/api', apiRoutes);
 };
