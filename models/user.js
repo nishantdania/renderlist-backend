@@ -34,8 +34,10 @@ const UserSchema = new Schema({
 			token : String,
 			profilePhoto : String
 		},
-		studio : Boolean
-
+		studio : {
+			type :Boolean,
+			default : false
+		}
 	},
 	{
 	  timestamps: true

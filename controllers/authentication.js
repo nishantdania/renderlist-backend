@@ -38,6 +38,7 @@ exports.checkState = function(req, res, next) {
 						data.profilePhoto = user.facebook.profilePhoto;
 					}
 					data.success = true;
+					data.hasStudio = user.studio;
 					res.send(data);
 				}			
 			});	
