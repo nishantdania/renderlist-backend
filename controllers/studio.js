@@ -4,17 +4,17 @@ const User = require('../models/user');
 exports.addStudio = function (req, res) {
 	var studioData = req.body;
 	var studio = new Studio();
-	studio.name = studioData.name;
+	studio.studioName = studioData.studioName;
 	studio.websiteURL = studioData.websiteURL;
 	studio.city = studioData.city;
 	studio.description = studioData.description;
 	studio.showreelURL = studioData.showreelURL;
 	studio._user = req.user._id;
 	studio.save( function(err) {
-		if(err) res.send('error');
+		if(err) res.status(400).send({ 'message' : 'error'});
 	});
 	User.findByIdAndUpdate(req.user._id, { studio : true }, function (err) {
-		if (err) res.status(404).send();	
+		if (err) res.status(400).send();	
 		else res.status(200).send();
 	});
 }
