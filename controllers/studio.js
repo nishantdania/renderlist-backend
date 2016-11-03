@@ -15,7 +15,7 @@ exports.addStudio = function (req, res) {
 	});
 	User.findByIdAndUpdate(req.user._id, { studio : true }, function (err) {
 		if (err) res.status(400).send();	
-		else res.status(200).send();
+		else res.status(200).send({'success' : true});
 	});
 }
 
