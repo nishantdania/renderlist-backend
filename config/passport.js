@@ -99,7 +99,6 @@ module.exports = function(passport) {
 		}
 	);
 	passport.use(jwtLogin);
-//	passport.use(localLogin);
 	passport.use(fbLogin);
 	passport.use(googleLogin);
 }
