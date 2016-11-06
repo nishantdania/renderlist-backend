@@ -21,10 +21,10 @@ exports.socialLogin = function(req, res, next) {
 exports.checkState = function(req, res, next) {
 	var token = req.body.token.slice(4);
 	jwt.verify(token, config.secret, function(err, decoded) {
-		if (err) res.send({'success' : false });
+		if (err) res.status(400).send({'success' : false });
 		else {
 			User.findOne({_id : decoded.id}, function(err, user) {
-				if (err) res.send({'success' : false });
+				if (err) res.status(400).send({'success' : false });
 				else {
 					var data = {};
 					if (user.google.id){
@@ -39,7 +39,7 @@ exports.checkState = function(req, res, next) {
 					}
 					data.success = true;
 					data.hasStudio = user.studio;
-					res.send(data);
+					res.status(200).send(data);
 				}			
 			});	
 		}	

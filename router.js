@@ -18,7 +18,7 @@ module.exports = function(app, passport) {
 	apiRoutes.use('/auth', authRoutes);
 	apiRoutes.get('/', requireAuth, 
 		function(req, res){
-			res.status(201).send('You are logged in...'); 
+			res.status(200).send('You are logged in...'); 
 		}		
 	);
 
