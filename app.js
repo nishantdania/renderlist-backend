@@ -1,4 +1,6 @@
 const express = require('express'),
+	fs = require('fs'),
+	path = require('path'),
 	app = express(),
 	logger = require('morgan'),
 	bodyParser = require('body-parser'),
@@ -13,9 +15,17 @@ require('./config/passport')(passport);
 
 mongoose.connect(config.database);
 
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'morgan.log'), {flags: 'a'});
+
 app.use(bodyParser.urlencoded({ extended: false  }));  
 app.use(bodyParser.json());
-app.use(logger('dev'));
+
+if (process.env.NODE_ENV == 'production'){
+	app.use(logger('combined', {stream: accessLogStream}));
+} else {
+	app.use(logger('dev'));
+}
+
 app.use(cookieParser());
 
 app.use(session({
