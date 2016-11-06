@@ -27,12 +27,11 @@ module.exports = function(passport) {
 
 	const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 		User.findOne({'_id' : payload.id }, function(err, user) {
-			if (err) { return done(err, false);  }
+			if (err) { done(err, false);  }
 			if (user) {
-			done(null, user);
-
+				done(null, user);
 			} else {
-			done(null, false);
+				done(null, false);
 			}
 		});
 	});
@@ -48,9 +47,9 @@ module.exports = function(passport) {
 	const fbLogin = new FacebookStrategy(fbOptions, function(token, refreshToken, profile, done) {
 		process.nextTick(function() {
 			User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
-					if(err) res.status(404).send(err);
+					if(err) done(err, false);
 					if(user) {
-						return done(null, user);
+						done(null, user);
 					} else {
 						var newUser = new User();
 						newUser.facebook.id = profile.id;
@@ -59,9 +58,9 @@ module.exports = function(passport) {
 						newUser.facebook.token = profile.token;
 						newUser.facebook.profilePhoto = profile.photos && profile.photos[0].value;
 						newUser.save(function(err, user) {
-							if (err) res.status(404).send(err); 
+							if (err) done(err, false); 
 						});
-						return done(null, newUser);	
+						done(null, newUser);	
 					}
 				});
 			});
@@ -79,9 +78,9 @@ module.exports = function(passport) {
 	const googleLogin = new GoogleStrategy(googleOptions, function(request, accessToken, refreshToken, profile, done) {
 		process.nextTick(function() {
 			User.findOne({ 'google.id' : profile.id }, function(err, user) {
-					if(err) res.status(404).send(err);
+					if(err) done(err, false); 
 					if(user) {
-						return done(null, user);
+						done(null, user);
 					} else {
 						var newUser = new User();
 						newUser.google.id = profile.id;
@@ -90,9 +89,9 @@ module.exports = function(passport) {
 						newUser.google.token = profile.token;
 						newUser.google.profilePhoto = profile.photos && profile.photos[0].value;
 						newUser.save(function(err, user) {
-							if (err) res.status(404).send(err); 
+							if (err) done(err, false); 
 						});
-						return done(null, newUser);	
+						done(null, newUser);	
 					}
 				});
 			});
