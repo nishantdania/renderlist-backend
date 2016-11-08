@@ -4,11 +4,13 @@ const User = require('../models/user');
 exports.addStudio = function (req, res) {
 	var studioData = req.body;
 	var studio = new Studio();
-	studio.studioName = studioData.studioName;
+	studio.name = studioData.name;
 	studio.websiteURL = studioData.websiteURL;
 	studio.city = studioData.city;
 	studio.description = studioData.description;
 	studio.showreelURL = studioData.showreelURL;
+	studio.email = studioData.email;
+	studio.isStudio = studioData.isStudio;
 	studio._user = req.user._id;
 	studio.save( function(err) {
 		if(err) res.status(400).send({ 'message' : 'error'});
