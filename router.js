@@ -5,7 +5,7 @@ const AuthenticationController = require('./controllers/authentication'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
-	req.session.redirect = req.query.redirect || 'http://localhost:8080';
+	req.session.redirect = req.query.redirect || 'http://www.renderlist.com';
 	next();
 };
 

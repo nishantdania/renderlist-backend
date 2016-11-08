@@ -2,7 +2,7 @@ const mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
 const StudioSchema = new Schema({  
-		studioName : {
+		name : {
 			type : String,
 			required : true
 		},		
@@ -23,6 +23,9 @@ const StudioSchema = new Schema({
 			type : String,
 			required : true
 		},
+		email : {
+			type : String
+		},
 		likes : {
 			type : Number
 		},
@@ -32,9 +35,14 @@ const StudioSchema = new Schema({
 		tags : {
 			type : [String]
 	   	},
+		isStudio : {
+			type : Boolean,
+			default : false,
+			required : true
+		},
 		_user : {
 			type : Schema.Types.ObjectId,
-			required : false
+			required : true
 		}	
 	},
 	{
