@@ -20,7 +20,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'morgan.log'), {
 app.use(bodyParser.urlencoded({ extended: false  }));  
 app.use(bodyParser.json());
 
-if (process.env.NODE_ENV == 'production'){
+if (process.env.NODE_ENV === 'production'){
 	app.use(logger('combined', {stream: accessLogStream}));
 } else {
 	app.use(logger('dev'));
