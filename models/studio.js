@@ -40,6 +40,10 @@ const StudioSchema = new Schema({
 			default : false,
 			required : true
 		},
+		isVerified : {
+			type : Boolean,
+			default : false
+		 },
 		_user : {
 			type : Schema.Types.ObjectId,
 			required : true
