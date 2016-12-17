@@ -5,7 +5,8 @@ module.exports = new function () {
 			'loginTokenExpiration': 2592000, // 1 month
 			'secret': 'carpediemdafaq',
 			'database': 'mongodb://localhost:27017/renderlist',
-			'port': process.env.PORT || 3000
+			'port': process.env.PORT || 3000,
+			'adminKey': 'Q29uanVyM3Iu'
 		};
 
 	default :
@@ -13,7 +14,8 @@ module.exports = new function () {
 			'loginTokenExpiration': 2592000, // 1 month
 			'secret': 'carpediemdafaq',
 			'database': 'mongodb://nishantdania:conjur3r@ds017672.mlab.com:17672/users',
-			'port': process.env.PORT || 3000
+			'port': process.env.PORT || 3000,
+			'adminKey': 'Q29uanVyM3Iu'
 		};
 	}
 }

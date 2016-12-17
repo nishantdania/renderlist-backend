@@ -47,6 +47,9 @@ const StudioSchema = new Schema({
 		_user : {
 			type : Schema.Types.ObjectId,
 			required : true
+		},
+		thumbnail : {
+			type : []
 		}	
 	},
 	{

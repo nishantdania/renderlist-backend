@@ -2,6 +2,7 @@ const AuthenticationController = require('./controllers/authentication'),
 	StudioController = require('./controllers/studio'),  
 	GooglePlacesController = require('./controllers/googlePlaces'),
 	ContactController = require('./controllers/contact'),
+	AdminController = require('./controllers/admin'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
@@ -13,9 +14,11 @@ var addRedirectURL = function(req, res, next) {
 module.exports = function(app, passport) {  
 	const requireAuth = passport.authenticate('jwt', { session: false  });  
 	const apiRoutes = express.Router(),
-
+	adminRoutes = express.Router(),
 	authRoutes = express.Router();
+
 	apiRoutes.use('/auth', authRoutes);
+	apiRoutes.use('/admin', adminRoutes);
 	apiRoutes.get('/', requireAuth, 
 		function(req, res){
 			res.status(200).send('You are logged in...'); 
@@ -33,8 +36,10 @@ module.exports = function(app, passport) {
 	apiRoutes.get('/myStudio', requireAuth, StudioController.getMyStudio);
 	apiRoutes.post('/userState', AuthenticationController.checkState)
 	apiRoutes.post('/contact', ContactController.saveMessage);
-
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
+
+	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
+	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
 
 	app.use('/api', apiRoutes);
 };
