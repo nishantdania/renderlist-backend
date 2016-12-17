@@ -6,7 +6,7 @@ const AuthenticationController = require('./controllers/authentication'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
-	req.session.redirect = req.query.redirect || 'http://www.renderlist.com';
+	req.session.redirect = req.query.redirect || 'https://www.renderlist.com';
 	next();
 };
 
@@ -25,7 +25,7 @@ module.exports = function(app, passport) {
 		}		
 	);
 
-	authRoutes.get('/facebook', addRedirectURL, passport.authenticate('facebook'));
+	authRoutes.get('/facebook', addRedirectURL, passport.authenticate('facebook', { scope : ['email'] }));
     authRoutes.get('/facebook/callback', passport.authenticate('facebook'), AuthenticationController.socialLogin);
 	
 	authRoutes.get('/google', addRedirectURL, passport.authenticate('google',{ scope : ['profile', 'email']  }));
