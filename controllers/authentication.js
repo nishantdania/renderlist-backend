@@ -46,3 +46,11 @@ exports.checkState = function(req, res, next) {
 	});
 }	
 
+exports.checkAdminAccess = function(req, res, next) {
+	if(req.body.adminKey == config.adminKey){
+		next();
+	}
+	else {
+		res.status(403).send('Forbidden');
+	}
+}
