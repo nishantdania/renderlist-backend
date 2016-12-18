@@ -41,11 +41,9 @@ exports.getVerifiedShowreels = function (req, res) {
 	Studio.find({'isVerified' : true}, function (err, studios) {
 		if(err) res.status(404).send({'success' : false});
 		else {
-
 			var showreels = [];
 			var asyncTasks = [];
-
-			studios.forEach(function(showreel) {
+			studios.forEach(function(showreel, index) {
 				asyncTasks.push(function(callback) {
 					var primaryData = new Object();
 					User.findById(showreel._user, function(err, user) {
@@ -56,6 +54,7 @@ exports.getVerifiedShowreels = function (req, res) {
 							primaryData.likes = showreel.likes;
 							primaryData.thumbnail = showreel.thumbnail[3].link;
 							primaryData.sid = showreel._id;
+							primaryData.ts = showreel._id.getTimestamp().getTime();
 							showreels.push(primaryData);
 							callback();
 						}		
@@ -65,7 +64,8 @@ exports.getVerifiedShowreels = function (req, res) {
 					});
 				});	
 			});
-			async.parallel(asyncTasks, function(){
+			async.parallel(asyncTasks, function() {
+				showreels.sort((a, b) => b.ts - a.ts);
 				var data = {};
 				data.showreels = showreels;
 				data.success = true;
