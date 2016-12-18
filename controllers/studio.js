@@ -1,6 +1,7 @@
 const Studio = require('../models/studio');
 const User = require('../models/user');
-	
+const async = require("async");
+
 exports.addStudio = function (req, res) {
 	var studioData = req.body;
 	var studio = new Studio();
@@ -12,6 +13,7 @@ exports.addStudio = function (req, res) {
 	studio.email = studioData.email;
 	studio.isStudio = studioData.isStudio;
 	studio._user = req.user._id;
+	console.log(studio);
 	studio.save( function(err) {
 		if(err) res.status(400).send({ 'message' : 'error'});
 	});
@@ -33,4 +35,42 @@ exports.getMyStudio = function (req, res) {
 		if(err) res.status(400).send({'success' : false});
 		res.status(200).send(studio);
 	});	
+}
+
+exports.getVerifiedShowreels = function (req, res) {
+	Studio.find({'isVerified' : true}, function (err, studios) {
+		if(err) res.status(404).send({'success' : false});
+		else {
+
+			var showreels = [];
+			var asyncTasks = [];
+
+			studios.forEach(function(showreel) {
+				asyncTasks.push(function(callback) {
+					var primaryData = new Object();
+					User.findById(showreel._user, function(err, user) {
+						if (user) {
+							primaryData.userProfilePhoto = user.facebook ? user.facebook.profilePhoto : user.google.profilePhoto;
+							primaryData.name = showreel.name;
+							primaryData.city = showreel.city;
+							primaryData.likes = showreel.likes;
+							primaryData.thumbnail = showreel.thumbnail[3].link;
+							primaryData.sid = showreel._id;
+							showreels.push(primaryData);
+							callback();
+						}		
+						else {
+							callback();
+						}
+					});
+				});	
+			});
+			async.parallel(asyncTasks, function(){
+				var data = {};
+				data.showreels = showreels;
+				data.success = true;
+				res.status(200).send(data);
+			});
+		}
+	});
 }
