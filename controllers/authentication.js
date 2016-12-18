@@ -47,7 +47,7 @@ exports.checkState = function(req, res, next) {
 }	
 
 exports.checkAdminAccess = function(req, res, next) {
-	if(req.body.adminKey == config.adminKey){
+	if(req.headers.adminkey == config.adminKey){
 		next();
 	}
 	else {

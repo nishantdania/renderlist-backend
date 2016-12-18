@@ -32,11 +32,12 @@ module.exports = function(app, passport) {
     authRoutes.get('/google/callback', passport.authenticate('google'), AuthenticationController.socialLogin);
 
 	apiRoutes.post('/addStudio', requireAuth, StudioController.addStudio);
-	apiRoutes.get('/studios', StudioController.getStudios);
+	apiRoutes.get('/studios', AuthenticationController.checkAdminAccess, StudioController.getStudios);
 	apiRoutes.get('/myStudio', requireAuth, StudioController.getMyStudio);
 	apiRoutes.post('/userState', AuthenticationController.checkState)
 	apiRoutes.post('/contact', ContactController.saveMessage);
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
+	apiRoutes.get('/verifiedShowreels', StudioController.getVerifiedShowreels);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
