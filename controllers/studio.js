@@ -1,5 +1,6 @@
 const Studio = require('../models/studio');
 const User = require('../models/user');
+const Username = require('../models/username');
 const async = require("async");
 
 exports.addStudio = function (req, res) {
@@ -13,7 +14,6 @@ exports.addStudio = function (req, res) {
 	studio.email = studioData.email;
 	studio.isStudio = studioData.isStudio;
 	studio._user = req.user._id;
-	console.log(studio);
 	studio.save( function(err) {
 		if(err) res.status(400).send({ 'message' : 'error'});
 	});
@@ -53,10 +53,18 @@ exports.getVerifiedShowreels = function (req, res) {
 							primaryData.city = showreel.city;
 							primaryData.likes = showreel.likes;
 							primaryData.thumbnail = showreel.thumbnail[3].link;
-							primaryData.sid = showreel._id;
 							primaryData.ts = showreel._id.getTimestamp().getTime();
-							showreels.push(primaryData);
-							callback();
+							Username.findOne({'sid' : showreel._id}, function(err, username) {
+								if (err) {
+									callback();
+									return;
+								}
+								else {
+									primaryData.username = username.username;
+									showreels.push(primaryData);
+									callback();
+								}
+							}); 
 						}		
 						else {
 							callback();

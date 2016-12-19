@@ -3,6 +3,8 @@ const AuthenticationController = require('./controllers/authentication'),
 	GooglePlacesController = require('./controllers/googlePlaces'),
 	ContactController = require('./controllers/contact'),
 	AdminController = require('./controllers/admin'),
+	UsernameController = require('./controllers/username'),
+	ProfileController = require('./controllers/profile'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
@@ -38,9 +40,12 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/contact', ContactController.saveMessage);
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
 	apiRoutes.get('/verifiedShowreels', StudioController.getVerifiedShowreels);
+	apiRoutes.post('/profile', ProfileController.getProfile);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
+	adminRoutes.post('/addUsername', AuthenticationController.checkAdminAccess, UsernameController.addUsername);
+	adminRoutes.get('/usernames', AuthenticationController.checkAdminAccess, UsernameController.getUsernames);
 
 	app.use('/api', apiRoutes);
 };
