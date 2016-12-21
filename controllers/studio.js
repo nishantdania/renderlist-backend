@@ -54,6 +54,7 @@ exports.getVerifiedShowreels = function (req, res) {
 							primaryData.likes = showreel.likes;
 							primaryData.thumbnail = showreel.thumbnail[3].link;
 							primaryData.ts = showreel._id.getTimestamp().getTime();
+							primaryData.showreelURL = showreel.showreelURL;
 							Username.findOne({'sid' : showreel._id}, function(err, username) {
 								if (err) {
 									callback();
