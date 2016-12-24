@@ -12,6 +12,7 @@ exports.addStudio = function (req, res) {
 	studio.description = studioData.description;
 	studio.showreelURL = studioData.showreelURL;
 	studio.email = studioData.email;
+	studio.tags = studioData.tags;
 	studio.isStudio = studioData.isStudio;
 	studio._user = req.user._id;
 	studio.save( function(err) {
@@ -83,3 +84,53 @@ exports.getVerifiedShowreels = function (req, res) {
 		}
 	});
 }
+
+exports.search = function (req, res) {
+	var searchQuery = req.body.searchQuery;
+	var tags = searchQuery.split(" ");
+	Studio.where('isVerified', true)
+		.where('tags').in(tags)
+		.exec(function (err, studios) {
+			var showreels = [];
+			var asyncTasks = [];
+			studios.forEach(function(showreel, index) {
+				asyncTasks.push(function(callback) {
+					var primaryData = new Object();
+					User.findById(showreel._user, function(err, user) {
+						if (user) {
+							primaryData.userProfilePhoto = user.facebook ? user.facebook.profilePhoto : user.google.profilePhoto;
+							primaryData.name = showreel.name;
+							primaryData.city = showreel.city;
+							primaryData.likes = showreel.likes;
+							primaryData.thumbnail = showreel.thumbnail[3].link;
+							primaryData.ts = showreel._id.getTimestamp().getTime();
+							primaryData.showreelURL = showreel.showreelURL;
+							Username.findOne({'sid' : showreel._id}, function(err, username) {
+								if (err) {
+									callback();
+									return;
+								}
+								else {
+									primaryData.username = username.username;
+									showreels.push(primaryData);
+									callback();
+								}
+							}); 
+						}		
+						else {
+							callback();
+						}
+					});
+				});	
+			});
+			async.parallel(asyncTasks, function() {
+				showreels.sort((a, b) => b.ts - a.ts);
+				var data = {};
+				data.showreels = showreels;
+				data.success = true;
+				res.status(200).send(data);
+			});
+
+		});
+}
+
