@@ -39,9 +39,10 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/userState', AuthenticationController.checkState)
 	apiRoutes.post('/contact', ContactController.saveMessage);
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
-	apiRoutes.get('/verifiedShowreels', StudioController.getVerifiedShowreels);
+	apiRoutes.post('/verifiedShowreels', StudioController.getVerifiedShowreels);
 	apiRoutes.post('/profile', ProfileController.getProfile);
 	apiRoutes.post('/search', StudioController.search);
+	apiRoutes.post('/incViews', ProfileController.incViews);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);

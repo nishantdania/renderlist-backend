@@ -3,6 +3,23 @@ const Studio = require('../models/studio');
 const User = require('../models/user');
 const async = require("async");
 
+exports.incViews = function(req, res) {
+console.log('here');
+	if (req.body.username == undefined || req.method == 'OPTIONS') 
+		res.status(400).send({'success' : false});
+	else {
+		Username.findOne({'username' : req.body.username}, function(err, username) {
+			if (err) res.status(400).send({'success' : false});
+			else if (username) {
+				var sid = username.sid;
+				Studio.findByIdAndUpdate(sid, {$inc: {views:1}}, function(err, studio) {
+					res.status(200).send({'success' : true});
+				});
+			}
+		});
+	}
+}
+
 exports.getProfile = function(req, res) {
 	if (req.body.username == undefined) {
 		res.status(404).send({'success' : false, 'message' : 'Invalid data'});

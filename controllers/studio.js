@@ -53,6 +53,7 @@ exports.getVerifiedShowreels = function (req, res) {
 							primaryData.name = showreel.name;
 							primaryData.city = showreel.city;
 							primaryData.likes = showreel.likes;
+							primaryData.views = showreel.views;
 							primaryData.thumbnail = showreel.thumbnail[3].link;
 							primaryData.ts = showreel._id.getTimestamp().getTime();
 							primaryData.showreelURL = showreel.showreelURL;
@@ -75,7 +76,11 @@ exports.getVerifiedShowreels = function (req, res) {
 				});	
 			});
 			async.parallel(asyncTasks, function() {
-				showreels.sort((a, b) => b.ts - a.ts);
+				if (req.body.sortId == 1)
+					showreels.sort((a, b) => b.views - a.views);
+				else {
+					showreels.sort((a, b) => b.ts - a.ts);
+				}
 				var data = {};
 				data.showreels = showreels;
 				data.success = true;
@@ -102,6 +107,7 @@ exports.search = function (req, res) {
 							primaryData.name = showreel.name;
 							primaryData.city = showreel.city;
 							primaryData.likes = showreel.likes;
+							primaryData.views = showreel.views;
 							primaryData.thumbnail = showreel.thumbnail[3].link;
 							primaryData.ts = showreel._id.getTimestamp().getTime();
 							primaryData.showreelURL = showreel.showreelURL;
@@ -124,7 +130,11 @@ exports.search = function (req, res) {
 				});	
 			});
 			async.parallel(asyncTasks, function() {
-				showreels.sort((a, b) => b.ts - a.ts);
+				if (req.body.sortId == 1)
+					showreels.sort((a, b) => b.views - a.views);
+				else {
+					showreels.sort((a, b) => b.ts - a.ts);
+				}
 				var data = {};
 				data.showreels = showreels;
 				data.success = true;
