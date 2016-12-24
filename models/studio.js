@@ -27,10 +27,12 @@ const StudioSchema = new Schema({
 			type : String
 		},
 		likes : {
-			type : Number
+			type : Number,
+			default : 0
 		},
 		views : {
-			type : Number
+			type : Number,
+			default : 0
 		},
 		tags : {
 			type : [String]
