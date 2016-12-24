@@ -41,6 +41,7 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
 	apiRoutes.get('/verifiedShowreels', StudioController.getVerifiedShowreels);
 	apiRoutes.post('/profile', ProfileController.getProfile);
+	apiRoutes.post('/search', StudioController.search);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
