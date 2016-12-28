@@ -4,7 +4,6 @@ const User = require('../models/user');
 const async = require("async");
 
 exports.incViews = function(req, res) {
-console.log('here');
 	if (req.body.username == undefined || req.method == 'OPTIONS') 
 		res.status(400).send({'success' : false});
 	else {
@@ -16,6 +15,16 @@ console.log('here');
 					res.status(200).send({'success' : true});
 				});
 			}
+		});
+	}
+}
+
+exports.incLikes = function(req, res) {
+	if (req.body.sid == undefined || req.method == 'OPTIONS') 
+		res.status(400).send({'success' : false});
+	else {
+		Studio.findByIdAndUpdate(req.body.sid, {$inc: {likes:1}}, function(err, studio) {
+			res.status(200).send({'success' : true});
 		});
 	}
 }
@@ -58,6 +67,7 @@ exports.getProfile = function(req, res) {
 					}
 					else {
 						data.profile = {};
+						data.profile.sid = showreelData._id;
 						data.profile.name = showreelData.name;
 						data.profile.city = showreelData.city;
 						data.profile.description = showreelData.description;

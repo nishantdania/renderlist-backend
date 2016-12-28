@@ -43,6 +43,7 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/profile', ProfileController.getProfile);
 	apiRoutes.post('/search', StudioController.search);
 	apiRoutes.post('/incViews', ProfileController.incViews);
+	apiRoutes.post('/incLikes', ProfileController.incLikes);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
