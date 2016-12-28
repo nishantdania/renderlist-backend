@@ -5,6 +5,7 @@ exports.getPlaces = function(req, res) {
 	var url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=' + input + '&types=(cities)&language=en&key=AIzaSyCoeCH-Vv1b_ASZOgW_4Dl18X2FS0Tk3vI';
 	request(url, function (err, response, body) {
 			if (body) {
+				console.log(body);
 				var placesTrimmed = [];
 				var obj = JSON.parse(body);
 				var predictions = obj.predictions;
