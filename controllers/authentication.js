@@ -2,6 +2,8 @@
 
 const jwt = require('jsonwebtoken'),
 	User = require('../models/user'),
+	Username = require('../models/username'),
+	async = require("async"),
 	config = require('../config/main');
 
 function generateToken(user) {
@@ -39,7 +41,23 @@ exports.checkState = function(req, res, next) {
 					}
 					data.success = true;
 					data.hasStudio = user.studio;
-					res.status(200).send(data);
+					var asyncTasks = [];
+					asyncTasks.push(function(callback) {
+						Username.findOne({'uid' : user._id}, function(err, username) {
+							if (err) {
+								res.status(400).send({'success' : false});
+								callback();
+								return;
+							}
+							else {
+								data.username = username.username;
+								callback();	
+							}
+						});	
+					});
+					async.parallel(asyncTasks, function() {
+						res.status(200).send(data);
+					});
 				}			
 			});	
 		}	
