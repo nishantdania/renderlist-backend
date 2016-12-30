@@ -2,6 +2,18 @@ const Studio = require('../models/studio');
 const User = require('../models/user');
 const Username = require('../models/username');
 const async = require("async");
+var multer  = require('multer');
+
+var storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, 'uploads/');
+	},
+	filename: function (req, file, cb) {
+		cb(null, Date.now() + '_' + Math.random().toString(36).substring(7) + '_' + file.originalname); //Appending extension
+	}
+});
+
+var upload = multer({ storage : storage }).single('showreelFile');
 
 exports.addStudio = function (req, res) {
 	var studioData = req.body;
@@ -21,6 +33,19 @@ exports.addStudio = function (req, res) {
 	User.findByIdAndUpdate(req.user._id, { studio : true }, function (err) {
 		if (err) res.status(400).send({'success' : false});	
 		else res.status(200).send({'success' : true});
+	});
+}
+
+exports.uploadShowreel = function (req, res) {
+	upload(req, res, function(err) {
+	if(err) {
+		console.log(err);
+		console.log('Error Occured');
+		return;
+	}
+	  console.log(req.file);
+	  res.end('Your File Uploaded');
+	  console.log('Photo Uploaded');
 	});
 }
 
