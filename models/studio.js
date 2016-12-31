@@ -15,9 +15,13 @@ const StudioSchema = new Schema({
 			type : String,
 			required : true
 		},		
+		place : {
+			type : Object,
+			required : true
+		},
 		showreelURL : {
 			type : String,
-			required : true
+			required : false 
 		},
 		description : {
 			type : String,
