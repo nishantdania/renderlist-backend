@@ -21,6 +21,7 @@ exports.addStudio = function (req, res) {
 	studio.name = studioData.name;
 	studio.websiteURL = studioData.websiteURL;
 	studio.city = studioData.city;
+	studio.place = studioData.place;
 	studio.description = studioData.description;
 	studio.showreelURL = studioData.showreelURL;
 	studio.email = studioData.email;
@@ -39,13 +40,12 @@ exports.addStudio = function (req, res) {
 exports.uploadShowreel = function (req, res) {
 	upload(req, res, function(err) {
 	if(err) {
-		console.log(err);
-		console.log('Error Occured');
+		res.status(400).send({'success' : false});
 		return;
 	}
-	  console.log(req.file);
-	  res.end('Your File Uploaded');
-	  console.log('Photo Uploaded');
+	setTimeout(
+	()=> {res.status(200).send({'success' : true});
+	}, 5000);
 	});
 }
 
