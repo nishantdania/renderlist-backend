@@ -29,6 +29,24 @@ exports.incLikes = function(req, res) {
 	}
 }
 
+exports.updateProfile = function(req, res) {
+	Studio.findById(req.body.sid, function(err, showreel) {
+		if (err) res.status(400).send({'success' : false});
+		if (showreel) {
+			const data = req.body;
+			showreel.name = data.name;
+			showreel.place = data.place;
+			showreel.city = data.city;
+			showreel.websiteURL = data.websiteURL;
+			showreel.email = data.email;
+			showreel.tags = data.tags;
+			showreel.description = data.description;
+			showreel.save();
+			res.status(200).send({'success' : true});
+		}
+	});
+}
+
 exports.getProfile = function(req, res) {
 	if (req.body.username == undefined) {
 		res.status(404).send({'success' : false, 'message' : 'Invalid data'});

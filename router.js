@@ -45,6 +45,7 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/incViews', ProfileController.incViews);
 	apiRoutes.post('/incLikes', ProfileController.incLikes);
 	apiRoutes.post('/upload', StudioController.uploadShowreel);
+	apiRoutes.post('/updateProfile', ProfileController.updateProfile);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);

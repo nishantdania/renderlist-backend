@@ -45,7 +45,7 @@ exports.uploadShowreel = function (req, res) {
 	}
 	setTimeout(
 	()=> {res.status(200).send({'success' : true});
-	}, 5000);
+	}, 5);
 	});
 }
 
