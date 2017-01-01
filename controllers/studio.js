@@ -56,12 +56,6 @@ exports.getStudios = function (req, res) {
 	});	
 }
 
-exports.getMyStudio = function (req, res) {
-	Studio.find({'_user' : req.user.id}, function (err, studio) {
-		if(err) res.status(400).send({'success' : false});
-		res.status(200).send(studio);
-	});	
-}
 
 exports.getVerifiedShowreels = function (req, res) {
 	Studio.find({'isVerified' : true}, function (err, studios) {
