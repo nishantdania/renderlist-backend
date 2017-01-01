@@ -29,6 +29,58 @@ exports.incLikes = function(req, res) {
 	}
 }
 
+exports.getMyProfile = function (req, res) {
+	Username.findOne({'username' : req.body.username}, function (err, username) {
+		if (err) res.status(400).send({'success' : false});
+		if (username) {
+			var sid = username.sid;
+			var uid = username.uid;
+			var showreelData = {};
+			var userData = {};
+			var asyncTasks = [];
+			asyncTasks.push(function(callback) {
+				Studio.findById(sid, function(err, showreel) {
+					if (err) callback;
+					else {
+						showreelData = showreel;
+						callback();
+					}
+				});	
+			});
+			asyncTasks.push(function(callback) {
+				User.findById(uid, function(err, user) {
+					if (err) callback;
+					else {
+						userData = user;
+						callback();
+					}
+				});	
+			});
+			async.parallel(asyncTasks, function() {
+				var data = {};
+				if (Object.keys(userData).length === 0 || Object.keys(showreelData).length === 0) {
+					data.success = false;
+				}
+				else {
+					data.profile = {};
+					data.profile.sid = showreelData._id;
+					data.profile.name = showreelData.name;
+					data.profile.city = showreelData.city;
+					data.profile.description = showreelData.description;
+					data.profile.websiteURL = showreelData.websiteURL;
+					data.profile.showreelURL = showreelData.showreelURL;
+					data.profile.email = showreelData.email;
+					data.profile.tags = showreelData.tags;
+					data.profile.profilePhoto = userData.facebook ? userData.facebook.profilePhoto : userData.google.profilePhoto;
+					data.success = true;
+				}
+				res.status(200).send({'data' : data});	
+			});
+
+		}
+	});
+}
+
 exports.updateProfile = function(req, res) {
 	Studio.findById(req.body.sid, function(err, showreel) {
 		if (err) res.status(400).send({'success' : false});

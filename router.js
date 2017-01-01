@@ -35,7 +35,7 @@ module.exports = function(app, passport) {
 
 	apiRoutes.post('/addStudio', requireAuth, StudioController.addStudio);
 	apiRoutes.get('/studios', AuthenticationController.checkAdminAccess, StudioController.getStudios);
-	apiRoutes.get('/myStudio', requireAuth, StudioController.getMyStudio);
+	apiRoutes.post('/myProfile', requireAuth, ProfileController.getMyProfile);
 	apiRoutes.post('/userState', AuthenticationController.checkState)
 	apiRoutes.post('/contact', ContactController.saveMessage);
 	apiRoutes.post('/places', GooglePlacesController.getPlaces);
