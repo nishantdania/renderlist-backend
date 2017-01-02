@@ -5,6 +5,7 @@ const AuthenticationController = require('./controllers/authentication'),
 	AdminController = require('./controllers/admin'),
 	UsernameController = require('./controllers/username'),
 	ProfileController = require('./controllers/profile'),
+	JobController = require('./controllers/job'),
 	express = require('express');
 
 var addRedirectURL = function(req, res, next) {
@@ -46,11 +47,13 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/incLikes', ProfileController.incLikes);
 	apiRoutes.post('/upload', StudioController.uploadShowreel);
 	apiRoutes.post('/updateProfile', ProfileController.updateProfile);
+	apiRoutes.get('/jobs', JobController.getJobs);
 
 	adminRoutes.post('/updateShowreelThumbnail', AuthenticationController.checkAdminAccess, AdminController.updateShowreelThumbnail);
 	adminRoutes.post('/verifyShowreel', AuthenticationController.checkAdminAccess, AdminController.verifyShowreel);
 	adminRoutes.post('/addUsername', AuthenticationController.checkAdminAccess, UsernameController.addUsername);
 	adminRoutes.get('/usernames', AuthenticationController.checkAdminAccess, UsernameController.getUsernames);
+	adminRoutes.post('/addJob', AuthenticationController.checkAdminAccess, JobController.addJob);
 
 	app.use('/api', apiRoutes);
 };
