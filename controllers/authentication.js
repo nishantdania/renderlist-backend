@@ -49,9 +49,13 @@ exports.checkState = function(req, res, next) {
 								callback();
 								return;
 							}
-							else {
+							else if (username) {
 								data.username = username.username;
 								callback();	
+							}
+							else {
+								data.username = '';
+								callback();
 							}
 						});	
 					});

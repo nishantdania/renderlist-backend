@@ -9,11 +9,39 @@ var storage = multer.diskStorage({
 		cb(null, 'uploads/');
 	},
 	filename: function (req, file, cb) {
-		cb(null, Date.now() + '_' + Math.random().toString(36).substring(7) + '_' + file.originalname); //Appending extension
+		cb(null, Date.now() + '_' + req.user._id + '_' + file.originalname); //Appending extension
 	}
 });
 
 var upload = multer({ storage : storage }).single('showreelFile');
+
+function generateUsernameAndSave (name, uid, sid) {
+	var username = '';
+	username = name.replace(/\s+/, "").toLowerCase();
+	Username.findOne({'username' : username}, function (err, name) {
+		if (!name && !err)	{
+			var uname = new Username();
+			uname.username = username;
+			uname.uid = uid;
+			uname.sid = sid;
+			uname.save();
+			return;
+		}
+		else if(name) {
+			username = username + '-' + S4() + S4();
+			var uname = new Username();
+			uname.username = username;
+			uname.uid = uid;
+			uname.sid = sid;
+			uname.save();
+			return;	
+		}
+	}); 
+}
+
+function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+}
 
 exports.addStudio = function (req, res) {
 	var studioData = req.body;
@@ -28,8 +56,11 @@ exports.addStudio = function (req, res) {
 	studio.tags = studioData.tags;
 	studio.isStudio = studioData.isStudio;
 	studio._user = req.user._id;
-	studio.save( function(err) {
+	studio.save( function(err, studio) {
 		if(err) res.status(400).send({ 'message' : 'error'});
+		else if (studio) {
+			var username = generateUsernameAndSave(studio.name, studio._user, studio._id);
+		}
 	});
 	User.findByIdAndUpdate(req.user._id, { studio : true }, function (err) {
 		if (err) res.status(400).send({'success' : false});	
