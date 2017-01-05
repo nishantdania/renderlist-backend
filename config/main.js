@@ -13,7 +13,7 @@ module.exports = new function () {
 		return {
 			'loginTokenExpiration': 2592000, // 1 month
 			'secret': 'carpediemdafaq',
-			'database': 'mongodb://nishantdania:conjur3r@ds017672.mlab.com:17672/users',
+			'database': 'mongodb://nishantdania:conjur3r@ds155418.mlab.com:55418/renderlist',
 			'port': process.env.PORT || 3000,
 			'adminKey': 'Q29uanVyM3Iu'
 		};

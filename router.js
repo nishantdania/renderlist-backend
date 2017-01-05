@@ -45,7 +45,7 @@ module.exports = function(app, passport) {
 	apiRoutes.post('/search', StudioController.search);
 	apiRoutes.post('/incViews', ProfileController.incViews);
 	apiRoutes.post('/incLikes', ProfileController.incLikes);
-	apiRoutes.post('/upload', StudioController.uploadShowreel);
+	apiRoutes.post('/upload', requireAuth, StudioController.uploadShowreel);
 	apiRoutes.post('/updateProfile', ProfileController.updateProfile);
 	apiRoutes.get('/jobs', JobController.getJobs);
 
