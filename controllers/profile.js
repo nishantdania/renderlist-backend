@@ -114,10 +114,17 @@ exports.getProfile = function(req, res) {
 				var asyncTasks = [];
 				asyncTasks.push(function(callback) {
 					Studio.findById(sid, function(err, showreel) {
-						if (err) callback;
+						if (err) callback();
 						else {
-							showreelData = showreel;
-							callback();
+							if ( showreel.isVerified ) {
+								showreelData = showreel;
+								callback();
+							}
+							else {
+								showreelData = {};
+								callback();
+							}
+							
 						}
 					});	
 				});
@@ -139,6 +146,7 @@ exports.getProfile = function(req, res) {
 						data.profile = {};
 						data.profile.sid = showreelData._id;
 						data.profile.name = showreelData.name;
+						data.profile.username = username.username;
 						data.profile.city = showreelData.city;
 						data.profile.description = showreelData.description;
 						data.profile.websiteURL = showreelData.websiteURL;
