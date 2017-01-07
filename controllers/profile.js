@@ -66,6 +66,7 @@ exports.getMyProfile = function (req, res) {
 					data.profile.sid = showreelData._id;
 					data.profile.name = showreelData.name;
 					data.profile.city = showreelData.city;
+					data.profile.place = showreelData.place;
 					data.profile.description = showreelData.description;
 					data.profile.websiteURL = showreelData.websiteURL;
 					data.profile.showreelURL = showreelData.showreelURL;
