@@ -17,8 +17,8 @@ mongoose.connect(config.database);
 
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'morgan.log'), {flags: 'a'});
 
-app.use(bodyParser.urlencoded({ extended: false  }));  
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit:'900mb'}));
+app.use(bodyParser.urlencoded({extended:true, limit:'900mb'}));
 
 if (process.env.NODE_ENV === 'production'){
 	app.use(logger('combined', {stream: accessLogStream}));
