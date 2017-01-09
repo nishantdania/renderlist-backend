@@ -29,11 +29,6 @@ exports.incLikes = function(req, res) {
 	}
 }
 
-exports.editTags = function(req, res) {
-	Studio.findByIdAndUpdate(req.body.sid, { 'tags' : req.body.tags }, function(err, studio) {
-		res.status(200).send({'success' : true});
-	});
-}
 
 exports.getMyProfile = function (req, res) {
 	Username.findOne({'username' : req.body.username}, function (err, username) {
