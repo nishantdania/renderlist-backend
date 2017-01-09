@@ -28,3 +28,15 @@ exports.verifyShowreel = function (req, res) {
 		});
 	}
 }
+
+exports.editTags = function(req, res) {
+	Studio.findByIdAndUpdate(req.body.sid, { 'tags' : req.body.tags }, function(err, studio) {
+		res.status(200).send({'success' : true});
+	});
+}
+
+exports.editCity = function(req, res) {
+	Studio.findByIdAndUpdate(req.body.sid, { 'city' : req.body.city }, function(err, studio) {
+		res.status(200).send({'success' : true});
+	});
+}
