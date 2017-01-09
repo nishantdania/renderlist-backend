@@ -54,6 +54,7 @@ module.exports = function(app, passport) {
 	adminRoutes.post('/addUsername', AuthenticationController.checkAdminAccess, UsernameController.addUsername);
 	adminRoutes.get('/usernames', AuthenticationController.checkAdminAccess, UsernameController.getUsernames);
 	adminRoutes.post('/addJob', AuthenticationController.checkAdminAccess, JobController.addJob);
+	adminRoutes.post('/editTags', AuthenticationController.checkAdminAccess, ProfileController.editTags);
 
 	app.use('/api', apiRoutes);
 };
