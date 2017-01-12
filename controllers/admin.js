@@ -50,6 +50,6 @@ exports.editShowreelURL = function(req, res) {
 
 exports.getUsers= function(req, res) {
 	User.find({}, function(err, users) {
-		res.status(200).send({'success' : true});
+		res.status(200).send(users);
 	});
 }
