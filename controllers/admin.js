@@ -40,3 +40,9 @@ exports.editCity = function(req, res) {
 		res.status(200).send({'success' : true});
 	});
 }
+
+exports.editShowreelURL = function(req, res) {
+	Studio.findByIdAndUpdate(req.body.sid, { 'showreelURL' : req.body.showreelURL }, function(err, studio) {
+		res.status(200).send({'success' : true});
+	});
+}
