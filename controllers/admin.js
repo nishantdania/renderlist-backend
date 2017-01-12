@@ -1,4 +1,5 @@
 const Studio = require('../models/studio');
+const User = require('../models/user');
 
 exports.updateShowreelThumbnail = function (req, res) {
 	if(req.body.type == 'vimeo') {
@@ -43,6 +44,12 @@ exports.editCity = function(req, res) {
 
 exports.editShowreelURL = function(req, res) {
 	Studio.findByIdAndUpdate(req.body.sid, { 'showreelURL' : req.body.showreelURL }, function(err, studio) {
+		res.status(200).send({'success' : true});
+	});
+}
+
+exports.getUsers= function(req, res) {
+	User.find({}, function(err, users) {
 		res.status(200).send({'success' : true});
 	});
 }
